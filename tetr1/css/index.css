@@ -1,0 +1,38 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  margin: 0;
+}
+
+body {
+  background-color: #000000;
+  color: #59c2ff;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  width: 450px;
+  border-radius: 16px;
+  border: 1px solid #ffffff;
+  padding: 16px;
+  background-color: #0f0e0e;
+}
+.card__image {
+  width: 100%;
+  border-radius: 16px;
+}
+.card__buy {
+  background-color: rgb(2, 82, 255);
+  color: white;
+  border-radius: 16px;
+  padding: 8px 16px;
+  border: none;
+  font-size: 16px;
+}
+
+/*# sourceMappingURL=index.css.map */
