@@ -1,0 +1,10 @@
+.auth-action {
+    text-align: center;
+    font-size: 14px;
+
+    span {
+        color: var(--color-primary);
+        cursor: pointer;
+        text-decoration: underline;
+    }
+}

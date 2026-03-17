@@ -1,0 +1,25 @@
+.user-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    &__email {
+        color: #c1c1c1;
+    }
+
+    &__actions {
+        display: flex;
+        gap: 8px;
+        margin-left: auto;
+    }
+
+    &__block-button {
+        &[data-blocked="false"] {
+            background-color: hsl(0, 100%, 68%);
+        }
+
+        &[data-blocked="true"] {
+            background-color: hsl(120, 35%, 56%);
+        }
+    }
+}

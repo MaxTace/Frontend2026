@@ -1,0 +1,27 @@
+.modal-backdrop {
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.5);
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .modal {
+        background-color: #171717;
+        padding: 16px;
+        border-radius: 16px;
+        max-width: 500px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        &__title {
+            margin: 0;
+            margin-bottom: 16px;
+        }
+    }
+}
