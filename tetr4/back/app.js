@@ -23,9 +23,9 @@ let items = [
     price: 75000,
     stock: 5,
     rating: 4.8,
-    image: "https://example.com/images/msi-laptop.jpg",
+    image: "https://static.insales-cdn.com/images/products/1/5788/894187164/2024-08-11_16-14-11.png",
   },
-  {
+   {
     id: 2,
     name: "Беспроводная мышь Logitech",
     category: "Электроника",
@@ -34,7 +34,7 @@ let items = [
     price: 1500,
     stock: 15,
     rating: 4.5,
-    image: "https://example.com/images/logitech-mouse.jpg",
+    image: "https://3logic.ru/pimg/pim/regular/1509793.jpg",
   },
   {
     id: 3,
@@ -45,7 +45,7 @@ let items = [
     price: 3500,
     stock: 8,
     rating: 4.7,
-    image: "https://example.com/images/keyboard.jpg",
+    image: "https://redragon.ru/public/o/products/8798/d0de9878.webp",
   },
   {
     id: 4,
@@ -55,17 +55,17 @@ let items = [
     price: 35,
     stock: 200,
     rating: 4.3,
-    image: "https://example.com/images/potato.jpg",
+    image: "https://www.tveragroprom.com/wp-content/uploads/2023/10/nature-plant-field-fruit-food-produce-1334453-pxhere.com_.jpg",
   },
   {
     id: 5,
-    name: "Молоко 3.2%",
+    name: "Молоко 2.5%",
     category: "Продукты",
     description: "Пастеризованное молоко отборного качества, 1 литр",
     price: 350,
     stock: 45,
     rating: 4.6,
-    image: "https://example.com/images/milk.jpg",
+    image: "https://ecomilk.ru/upload/iblock/8d4/7us50mu65vv4ujm5trnkzvzh9vnyvp5z.png",
   },
   {
     id: 6,
@@ -75,7 +75,7 @@ let items = [
     price: 2000,
     stock: 12,
     rating: 4.9,
-    image: "https://example.com/images/cat-food.jpg",
+    image: "https://katiko.ru/image/cache/catalog/2021/monge/855/70011938-2-1200x1200.jpg",
   },
   {
     id: 7,
@@ -85,7 +85,7 @@ let items = [
     price: 50,
     stock: 60,
     rating: 4.2,
-    image: "https://example.com/images/corn.jpg",
+    image: "https://www.deloks.ru/upload/iblock/8ec/b4m567xupnzqzhyc7lnfp7tzp3clxd7y/kukuruza_bondyuel_konservirovannaya_340_g_1_full.jpg",
   },
   {
     id: 8,
@@ -95,7 +95,7 @@ let items = [
     price: 3500,
     stock: 3,
     rating: 5.0,
-    image: "https://example.com/images/cake.jpg",
+    image: "https://sedelice.ru/uploads/product/new/mvK_6T2DKvQN.jpg",
   },
   {
     id: 9,
@@ -105,17 +105,17 @@ let items = [
     price: 700,
     stock: 25,
     rating: 4.4,
-    image: "https://example.com/images/candy.jpg",
+    image: "https://opttorg-horeca.ru/assets/images/catalog/konditerskie-izdeliya/shokoladnye-konfety-assorti-miks-ekstra.jpg",
   },
   {
     id: 10,
-    name: "Напиток Coca-Cola",
+    name: "Напиток Добри Кола",
     category: "Напитки",
     description: "Газированный напиток Coca-Cola, 1.5 литра",
     price: 100,
     stock: 50,
     rating: 4.1,
-    image: "https://example.com/images/cola.jpg",
+    image: "https://tsx.x5static.net/i/800x800-fit/xdelivery/files/4b/a0/5426a8e1e461aab5e588d424160b.jpg",
   },
   {
     id: 11,
@@ -125,7 +125,7 @@ let items = [
     price: 8900,
     stock: 7,
     rating: 4.8,
-    image: "https://example.com/images/sony-headphones.jpg",
+    image: "https://image.kazanexpress.ru/crj9b8p1uakkt3hiu200/t_product_high.jpg",
   },
   {
     id: 12,
@@ -135,7 +135,7 @@ let items = [
     price: 2800,
     stock: 10,
     rating: 4.7,
-    image: "https://example.com/images/dog-food.jpg",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQF6c7FVzFr6fsz9-0NfRJYIDxy4gOoeOf-fA&s",
   },
 ];
 
