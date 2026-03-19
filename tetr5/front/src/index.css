@@ -7,6 +7,16 @@ body {
     Roboto,
     Arial,
     sans-serif;
-  background: #204ec2;
-  color: #5c6683;
+  background: #f5f5f5; /* Светлый фон вместо синего */
+  color: #333;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.App {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
