@@ -6,7 +6,6 @@ const apiClient = axios.create({
     "Content-Type": "application/json",
     accept: "application/json",
   },
-  withCredentials: true,
 });
 
 apiClient.interceptors.request.use(
@@ -33,7 +32,7 @@ apiClient.interceptors.response.use(
       if (!refreshToken) {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
-
+        window.location.href = "/login";
         return Promise.reject(error);
       }
 
@@ -56,7 +55,7 @@ apiClient.interceptors.response.use(
         console.error("Refresh failed", refreshError);
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
-
+        window.location.href = "/login";
         return Promise.reject(refreshError);
       }
     }
@@ -65,19 +64,56 @@ apiClient.interceptors.response.use(
 );
 
 export const api = {
+  // Аутентификация
   register: (userData) =>
     apiClient.post("/api/auth/register", userData).then((res) => res.data),
+  
   login: (credentials) =>
     apiClient.post("/api/auth/login", credentials).then((res) => res.data),
+  
   getMe: () => apiClient.get("/api/auth/me").then((res) => res.data),
+  
+  refresh: (refreshToken) =>
+    apiClient.post("/api/auth/refresh", { refreshToken }).then((res) => res.data),
 
+  // Товары
   getItems: () => apiClient.get("/items").then((res) => res.data),
+  
   getProductById: (id) => apiClient.get(`/items/${id}`).then((res) => res.data),
+  
   createProduct: (product) =>
     apiClient.post("/items", product).then((res) => res.data),
+  
   updateProduct: (id, product) =>
-    apiClient.patch(`/items/${id}`, product).then((res) => res.data),
-  deleteProduct: (id) => apiClient.delete(`/items/${id}`),
+    apiClient.put(`/items/${id}`, product).then((res) => res.data), // Изменено с patch на put
+  
+  patchProduct: (id, product) =>
+    apiClient.patch(`/items/${id}`, product).then((res) => res.data), // Добавлен patch
+  
+  deleteProduct: (id) => 
+    apiClient.delete(`/items/${id}`).then((res) => res.data), // Исправлено - возвращаем данные
+  
+  // Категории и поиск
+  getCategories: () => 
+    apiClient.get("/categories").then((res) => res.data),
+  
+  getItemsByCategory: (category) => 
+    apiClient.get(`/items/category/${category}`).then((res) => res.data),
+  
+  searchItems: (query) => 
+    apiClient.get(`/items/search/${query}`).then((res) => res.data),
 
+  // Пользователи (админ)
   getUsers: () => apiClient.get("/api/users").then((res) => res.data),
+  
+  getUserById: (id) => 
+    apiClient.get(`/api/users/${id}`).then((res) => res.data),
+  
+  updateUser: (id, userData) => 
+    apiClient.put(`/api/users/${id}`, userData).then((res) => res.data),
+  
+  deleteUser: (id) => 
+    apiClient.delete(`/api/users/${id}`).then((res) => res.data),
 };
+
+export default api;
