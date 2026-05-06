@@ -10,7 +10,6 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import { api } from "./api";
 
-// Компонент для защиты маршрутов
 const PrivateRoute = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const token = localStorage.getItem("accessToken");
@@ -23,7 +22,6 @@ const PrivateRoute = ({ children }) => {
       }
 
       try {
-        // Проверяем, валиден ли токен
         await api.getMe();
         setIsAuthenticated(true);
       } catch (err) {
@@ -38,7 +36,7 @@ const PrivateRoute = ({ children }) => {
   }, [token]);
 
   if (isAuthenticated === null) {
-    return <div className="loading">Загрузка...</div>; // или спиннер
+    return <div className="loading">Загрузка...</div>;
   }
 
   return isAuthenticated ? children : <Navigate to="/login" />;

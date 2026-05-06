@@ -83,20 +83,21 @@ app.use(
     methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true, // Важно!
-  })
+  }),
 );
 
 // Добавьте обработку OPTIONS запросов
-app.options('*', cors({
-  origin: "http://localhost:3001",
-  credentials: true,
-}));
+app.options(
+  "*",
+  cors({
+    origin: "http://localhost:3001",
+    credentials: true,
+  }),
+);
 
 app.use(express.json());
 let users = [];
 let refreshTokens = new Set();
-
-<<<<<<< HEAD
 const createTestUser = async () => {
   const testUser = {
     id: "1",
@@ -122,28 +123,7 @@ const createTestUser = async () => {
     console.log("✓ Тестовый пользователь создан:");
     console.log("  Email: test@mail.ru");
     console.log("  Пароль: password123");
-=======
-// Функция для создания тестового пользователя
-const createTestUser = async () => {
-  try {
-    const exists = users.some((u) => u.email === "test@mail.ru");
-    if (!exists) {
-      const passwordHash = await bcrypt.hash("password123", SALT_ROUNDS);
-      users.push({
-        id: "1",
-        email: "test@mail.ru",
-        passwordHash,
-        first_name: "Тест",
-        last_name: "Тестов",
-        role: "admin",
-      });
-      console.log("✓ Тестовый пользователь создан:");
-      console.log("  Email: test@mail.ru");
-      console.log("  Пароль: password123");
-    }
-  } catch (error) {
-    console.error("Ошибка при создании тестового пользователя:", error);
->>>>>>> 7b1a366e5cc05c95aeac08e09207e941c54a8eba
+    a366e5cc05c95aeac08e09207e941c54a8eba;
   }
 };
 
@@ -516,21 +496,27 @@ app.post("/api/auth/register", async (req, res) => {
 
   // Проверка длины пароля
   if (password.length < 6) {
-    return res.status(400).json({ error: "Password must be at least 6 characters" });
+    return res
+      .status(400)
+      .json({ error: "Password must be at least 6 characters" });
   }
 
   // Проверка существующего пользователя
   const existingUser = users.find((u) => u.email === email);
   if (existingUser) {
-    return res.status(409).json({ error: "User with this email already exists" });
+    return res
+      .status(409)
+      .json({ error: "User with this email already exists" });
   }
 
   try {
     const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
-    
+
     // Генерация правильного ID
-    const newId = String(users.length > 0 ? Math.max(...users.map(u => parseInt(u.id))) + 1 : 1);
-    
+    const newId = String(
+      users.length > 0 ? Math.max(...users.map((u) => parseInt(u.id))) + 1 : 1,
+    );
+
     const newUser = {
       id: newId,
       email,
@@ -539,14 +525,9 @@ app.post("/api/auth/register", async (req, res) => {
       last_name,
       role: "user",
     };
-    
+
     users.push(newUser);
-<<<<<<< HEAD
     await invalidateCache("api:users*");
-=======
-    
-    console.log(`✓ Новый пользователь зарегистрирован: ${email}`);
->>>>>>> 7b1a366e5cc05c95aeac08e09207e941c54a8eba
 
     res.status(201).json({
       id: newUser.id,
@@ -1062,8 +1043,9 @@ app.post(
     }
 
     // Исправленная генерация ID
-    const newId = items.length > 0 ? Math.max(...items.map(i => i.id)) + 1 : 1;
-    
+    const newId =
+      items.length > 0 ? Math.max(...items.map((i) => i.id)) + 1 : 1;
+
     const newProduct = {
       id: newId,
       name,
