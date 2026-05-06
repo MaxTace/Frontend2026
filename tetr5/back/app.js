@@ -80,14 +80,23 @@ const SALT_ROUNDS = 10;
 app.use(
   cors({
     origin: "http://localhost:3001",
-    methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
-  }),
+    credentials: true, // Важно!
+  })
 );
+
+// Добавьте обработку OPTIONS запросов
+app.options('*', cors({
+  origin: "http://localhost:3001",
+  credentials: true,
+}));
+
 app.use(express.json());
 let users = [];
 let refreshTokens = new Set();
 
+<<<<<<< HEAD
 const createTestUser = async () => {
   const testUser = {
     id: "1",
@@ -113,12 +122,33 @@ const createTestUser = async () => {
     console.log("✓ Тестовый пользователь создан:");
     console.log("  Email: test@mail.ru");
     console.log("  Пароль: password123");
+=======
+// Функция для создания тестового пользователя
+const createTestUser = async () => {
+  try {
+    const exists = users.some((u) => u.email === "test@mail.ru");
+    if (!exists) {
+      const passwordHash = await bcrypt.hash("password123", SALT_ROUNDS);
+      users.push({
+        id: "1",
+        email: "test@mail.ru",
+        passwordHash,
+        first_name: "Тест",
+        last_name: "Тестов",
+        role: "admin",
+      });
+      console.log("✓ Тестовый пользователь создан:");
+      console.log("  Email: test@mail.ru");
+      console.log("  Пароль: password123");
+    }
+  } catch (error) {
+    console.error("Ошибка при создании тестового пользователя:", error);
+>>>>>>> 7b1a366e5cc05c95aeac08e09207e941c54a8eba
   }
 };
 
-// Вызовите функцию после инициализации
-createTestUser();
-
+// Исправленный вызов асинхронной функции
+createTestUser().catch(console.error);
 let items = [
   {
     id: 1,
@@ -473,29 +503,50 @@ const roleMiddleware = (allowedRoles) => {
 app.post("/api/auth/register", async (req, res) => {
   const { email, password, first_name, last_name } = req.body;
 
+  // Валидация
   if (!email || !password || !first_name || !last_name) {
     return res.status(400).json({ error: "Missing required fields" });
   }
 
+  // Проверка email формата
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ error: "Invalid email format" });
+  }
+
+  // Проверка длины пароля
+  if (password.length < 6) {
+    return res.status(400).json({ error: "Password must be at least 6 characters" });
+  }
+
+  // Проверка существующего пользователя
   const existingUser = users.find((u) => u.email === email);
   if (existingUser) {
-    return res
-      .status(409)
-      .json({ error: "User with this email already exists" });
+    return res.status(409).json({ error: "User with this email already exists" });
   }
 
   try {
     const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+    
+    // Генерация правильного ID
+    const newId = String(users.length > 0 ? Math.max(...users.map(u => parseInt(u.id))) + 1 : 1);
+    
     const newUser = {
-      id: String(users.length + 1),
+      id: newId,
       email,
       passwordHash,
       first_name,
       last_name,
       role: "user",
     };
+    
     users.push(newUser);
+<<<<<<< HEAD
     await invalidateCache("api:users*");
+=======
+    
+    console.log(`✓ Новый пользователь зарегистрирован: ${email}`);
+>>>>>>> 7b1a366e5cc05c95aeac08e09207e941c54a8eba
 
     res.status(201).json({
       id: newUser.id,
@@ -505,8 +556,8 @@ app.post("/api/auth/register", async (req, res) => {
       role: newUser.role,
     });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Registration failed" });
+    console.error("Registration error:", err);
+    res.status(500).json({ error: "Registration failed. Please try again." });
   }
 });
 
@@ -1010,8 +1061,11 @@ app.post(
         .json({ error: "Рейтинг должен быть числом от 0 до 5" });
     }
 
+    // Исправленная генерация ID
+    const newId = items.length > 0 ? Math.max(...items.map(i => i.id)) + 1 : 1;
+    
     const newProduct = {
-      id: items.length > 0 ? Math.max(...items.map((i) => i.id)) + 1 : 1,
+      id: newId,
       name,
       category,
       description,
@@ -1099,7 +1153,7 @@ app.put(
     }
 
     items[productIndex] = {
-      id,
+      ...items[productIndex],
       name,
       category,
       description,
@@ -1107,6 +1161,7 @@ app.put(
       stock,
       rating: rating || items[productIndex].rating,
       image: image || items[productIndex].image,
+      id: id, // убеждаемся, что ID не меняется
     };
 
     await invalidateCache("api:products*");

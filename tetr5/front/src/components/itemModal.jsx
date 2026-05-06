@@ -17,13 +17,23 @@ export default function ProductModal({
   useEffect(() => {
     if (!open) return;
 
-    setName(initialProduct?.name ?? "");
-    setCategory(initialProduct?.category ?? "");
-    setDescription(initialProduct?.description ?? "");
-    setPrice(initialProduct?.price ?? "");
-    setStock(initialProduct?.stock ?? "");
-    setRating(initialProduct?.rating ?? "");
-  }, [open, initialProduct]);
+    if (mode === "edit" && initialProduct) {
+      setName(initialProduct.name ?? "");
+      setCategory(initialProduct.category ?? "");
+      setDescription(initialProduct.description ?? "");
+      setPrice(initialProduct.price ?? "");
+      setStock(initialProduct.stock ?? "");
+      setRating(initialProduct.rating ?? "");
+    } else {
+      // Очищаем форму при создании нового товара
+      setName("");
+      setCategory("");
+      setDescription("");
+      setPrice("");
+      setStock("");
+      setRating("");
+    }
+  }, [open, mode, initialProduct]);
 
   if (!open) return null;
 
@@ -32,20 +42,48 @@ export default function ProductModal({
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // Валидация
     if (!name.trim()) {
-      alert("Введите название");
+      alert("Введите название товара");
+      return;
+    }
+    if (!category.trim()) {
+      alert("Введите категорию товара");
+      return;
+    }
+    if (!description.trim()) {
+      alert("Введите описание товара");
+      return;
+    }
+    
+    const priceNum = Number(price);
+    const stockNum = Number(stock);
+    
+    if (isNaN(priceNum) || priceNum <= 0) {
+      alert("Цена должна быть положительным числом");
+      return;
+    }
+    
+    if (isNaN(stockNum) || stockNum < 0) {
+      alert("Количество на складе должно быть неотрицательным числом");
       return;
     }
 
-    onSubmit({
-      id: initialProduct?.id,
-      name,
-      category,
-      description,
-      price: Number(price),
-      stock: Number(stock),
-      rating: Number(rating),
-    });
+    const productData = {
+      name: name.trim(),
+      category: category.trim(),
+      description: description.trim(),
+      price: priceNum,
+      stock: stockNum,
+      rating: rating ? Number(rating) : 0,
+    };
+
+    // Если это редактирование, добавляем id
+    if (mode === "edit" && initialProduct) {
+      productData.id = initialProduct.id;
+    }
+
+    onSubmit(productData);
   };
 
   return (
@@ -65,56 +103,74 @@ export default function ProductModal({
 
         <form className="form" onSubmit={handleSubmit}>
           <label className="label">
-            Название
+            Название *
             <input
               className="input"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              placeholder="Введите название товара"
+              required
             />
           </label>
 
           <label className="label">
-            Категория
+            Категория *
             <input
               className="input"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
+              placeholder="Введите категорию"
+              required
             />
           </label>
 
           <label className="label">
-            Описание
-            <input
+            Описание *
+            <textarea
               className="input"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
+              placeholder="Введите описание товара"
+              rows="3"
+              required
             />
           </label>
 
           <label className="label">
-            Цена
+            Цена *
             <input
               className="input"
+              type="number"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
+              placeholder="Введите цену"
+              required
             />
           </label>
 
           <label className="label">
-            Количество
+            Количество на складе *
             <input
               className="input"
+              type="number"
               value={stock}
               onChange={(e) => setStock(e.target.value)}
+              placeholder="Введите количество"
+              required
             />
           </label>
 
           <label className="label">
-            Рейтинг
+            Рейтинг (0-5)
             <input
               className="input"
+              type="number"
+              step="0.1"
+              min="0"
+              max="5"
               value={rating}
               onChange={(e) => setRating(e.target.value)}
+              placeholder="Введите рейтинг"
             />
           </label>
 

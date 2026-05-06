@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 export default function ItemsPage() {
   const [Items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [currentUser, setCurrentUser] = useState(null); // Добавить состояние для пользователя
+  const [currentUser, setCurrentUser] = useState(null);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState("create");
@@ -32,7 +32,6 @@ export default function ItemsPage() {
       setCurrentUser(user);
     } catch (err) {
       console.error("Failed to load user", err);
-
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
       navigate("/login");
@@ -76,6 +75,7 @@ export default function ItemsPage() {
     try {
       await api.deleteProduct(id);
       setItems((prev) => prev.filter((p) => p.id !== id));
+      alert("Товар успешно удален");
     } catch (err) {
       console.error(err);
       alert("Ошибка удаления товара");
@@ -99,10 +99,13 @@ export default function ItemsPage() {
       alert("Ошибка сохранения товара");
     }
   };
-  const canCreateOrEdit =
-    currentUser &&
-    (currentUser.role === "seller" || currentUser.role === "admin");
+
+  const canCreateOrEdit = currentUser && (currentUser.role === "seller" || currentUser.role === "admin");
   const canDelete = currentUser && currentUser.role === "admin";
+
+  // Создаем функции только если есть права
+  const handleEditFunction = canCreateOrEdit ? openEdit : null;
+  const handleDeleteFunction = canDelete ? handleDelete : null;
 
   return (
     <div className="page">
@@ -140,8 +143,8 @@ export default function ItemsPage() {
           ) : (
             <ItemsList
               items={Items}
-              onEdit={canCreateOrEdit ? openEdit : null}
-              onDelete={canDelete ? handleDelete : null}
+              onEdit={handleEditFunction}
+              onDelete={handleDeleteFunction}
             />
           )}
         </div>

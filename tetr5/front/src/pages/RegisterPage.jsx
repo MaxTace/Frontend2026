@@ -11,6 +11,7 @@ const RegisterPage = () => {
     last_name: "",
   });
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -19,26 +20,49 @@ const RegisterPage = () => {
       ...formData,
       [e.target.name]: e.target.value,
     });
+    // Очищаем ошибки при вводе
+    setError("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setSuccess("");
     setLoading(true);
 
-    try {
-      await api.register(formData);
+    // Клиентская валидация
+    if (formData.password.length < 6) {
+      setError("Пароль должен содержать минимум 6 символов");
+      setLoading(false);
+      return;
+    }
 
-      // После успешной регистрации перенаправляем на страницу входа
-      navigate("/login", {
-        state: { message: "Регистрация успешна! Теперь вы можете войти." },
-      });
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setError("Введите корректный email адрес");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await api.register(formData);
+      console.log("Registration successful:", response);
+      setSuccess("Регистрация успешна! Перенаправление на страницу входа...");
+      
+      // Перенаправляем через 2 секунды
+      setTimeout(() => {
+        navigate("/login", {
+          state: { message: "Регистрация успешна! Теперь вы можете войти." },
+        });
+      }, 2000);
     } catch (err) {
       console.error("Register error:", err);
       if (err.response?.status === 409) {
         setError("Пользователь с таким email уже существует");
+      } else if (err.response?.status === 400) {
+        setError(err.response.data.error || "Проверьте правильность заполнения полей");
       } else {
-        setError("Ошибка при регистрации. Попробуйте позже.");
+        setError("Ошибка при регистрации. Проверьте подключение к серверу.");
       }
     } finally {
       setLoading(false);
@@ -51,6 +75,7 @@ const RegisterPage = () => {
         <h2 className="auth-title">Регистрация</h2>
 
         {error && <div className="auth-error">{error}</div>}
+        {success && <div className="auth-success">{success}</div>}
 
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
@@ -75,7 +100,7 @@ const RegisterPage = () => {
               type="password"
               value={formData.password}
               onChange={handleChange}
-              placeholder="Придумайте пароль"
+              placeholder="Придумайте пароль (минимум 6 символов)"
               required
               minLength="6"
               disabled={loading}
